@@ -1,5 +1,7 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const { Pool } = require('pg');
+require('dotenv').config();
 const pool = new Pool({
     user: process.env.DATABASE_USER,
     host: process.env.DATABASE_URL,
