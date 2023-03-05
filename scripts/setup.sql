@@ -20,7 +20,7 @@ CREATE TABLE quality_record_classifications (
 
 CREATE TABLE quality_records (
 	id serial PRIMARY KEY,
-    date TIMESTAMP NOT NULL,
+    date DATE NOT NULL,
 	customer VARCHAR( 255 ) NOT NULL,
     issue VARCHAR( 255 ) NOT NULL,
     cost int NOT NULL,

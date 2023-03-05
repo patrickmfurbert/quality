@@ -10,4 +10,24 @@ exports.getQualityRecordById = async (req: any, res: any) => {
     res.json(qualityRecords);
 }
 
-export {}
+exports.getQualityRecordByDate = async (req: any, res: any) => {
+    const { createdOn, createdAfter, createdBefore } = req.query;
+
+    let qualityRecords;
+
+    if (createdOn) {
+        qualityRecords = await QualityRecord.findByDate(createdOn);
+    } else {
+        if(createdBefore && !createdAfter){
+            qualityRecords = await QualityRecord.findByBeforeDate(createdBefore);
+        }else if(createdAfter && !createdBefore){
+            qualityRecords = await QualityRecord.findByAfterDate(createdAfter);
+        }else if(createdBefore && createdAfter){
+            qualityRecords = await QualityRecord.findByBetweenDates(createdAfter, createdBefore);
+        }
+    }
+
+    res.json(qualityRecords);
+}
+
+export { }

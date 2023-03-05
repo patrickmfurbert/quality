@@ -3,7 +3,7 @@ const pool = require("../persistence/db");
 class QualityRecord {
 
     id: number;
-    date: Date;
+    date: string;
     customer: string;
     issue: string;
     cost: number;
@@ -24,11 +24,17 @@ class QualityRecord {
 
 
     //find all
-    static async findAll(){
+    static async findAll() {
         const client = await pool.connect();
 
-        try{
-            const query = 'select * from quality_records';
+        try {
+            const query = `
+            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            from quality_records qr
+            join quality_record_categories qro on qr.category = qro.id
+            join quality_record_classifications qrc on qr.classification = qrc.id
+            `;
+
             const { rows } = await client.query(query);
             const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
             return qualityRecords;
@@ -40,11 +46,18 @@ class QualityRecord {
     }
 
     //find by id
-    static async findById(id: number){
+    static async findById(id: number) {
         const client = await pool.connect();
 
-        try{
-            const query = 'select * from quality_records where id =$1';
+        try {
+            const query = `
+            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            from quality_records qr
+            join quality_record_categories qro on qr.category = qro.id
+            join quality_record_classifications qrc on qr.classification = qrc.id
+            where qr.id =$1
+            `;
+
             const { rows } = await client.query(query, [id]);
             const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
             return qualityRecords;
@@ -56,10 +69,93 @@ class QualityRecord {
     }
 
     //find by date
-    static async findByDate(date: string){
+    static async findByDate(date: string) {
         const client = await pool.connect();
 
-        try{
+        try {
+            const query = `
+            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            from quality_records qr
+            join quality_record_categories qro on qr.category = qro.id
+            join quality_record_classifications qrc on qr.classification = qrc.id
+            where qr.date = $1
+            `;
+
+            const { rows } = await client.query(query, [date]);
+            const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
+            return qualityRecords;
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            client.release()
+        }
+    }
+
+    //find by before date
+    static async findByBeforeDate(date: string) {
+        const client = await pool.connect();
+
+        try {
+            const query = `
+                select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+                from quality_records qr
+                join quality_record_categories qro on qr.category = qro.id
+                join quality_record_classifications qrc on qr.classification = qrc.id
+                where qr.date <= $1
+                `;
+
+            const { rows } = await client.query(query, [date]);
+            const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
+            return qualityRecords;
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            client.release()
+        }
+    }
+
+    //find by before date
+    static async findByAfterDate(date: string) {
+        const client = await pool.connect();
+
+        try {
+            const query = `
+                        select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+                        from quality_records qr
+                        join quality_record_categories qro on qr.category = qro.id
+                        join quality_record_classifications qrc on qr.classification = qrc.id
+                        where qr.date >= $1
+                        `;
+
+            const { rows } = await client.query(query, [date]);
+            const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
+            return qualityRecords;
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            client.release()
+        }
+    }
+
+    //find by before date
+    static async findByBetweenDates(createdAfter: string, createdBefore: string) {
+        const client = await pool.connect();
+
+        try {
+            const query = `
+                        select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+                        from quality_records qr
+                        join quality_record_categories qro on qr.category = qro.id
+                        join quality_record_classifications qrc on qr.classification = qrc.id
+                        where qr.date between $1 and $2
+                        `;
+
+            const { rows } = await client.query(query, [createdAfter, createdBefore]);
+            const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
+            return qualityRecords;
 
         } catch (err) {
             console.error(err);
@@ -69,10 +165,10 @@ class QualityRecord {
     }
 
     //find by customer
-    static async findByCustomer(customer: string){
+    static async findByCustomer(customer: string) {
         const client = await pool.connect();
 
-        try{
+        try {
 
         } catch (err) {
             console.error(err);
@@ -82,10 +178,10 @@ class QualityRecord {
     }
 
     //find by month & year
-    static async findByMonthAndYear(date: string){
+    static async findByMonthAndYear(date: string) {
         const client = await pool.connect();
 
-        try{
+        try {
 
         } catch (err) {
             console.error(err);
@@ -95,10 +191,10 @@ class QualityRecord {
     }
 
     //find by year
-    static async findByYear(year: string){
+    static async findByYear(year: string) {
         const client = await pool.connect();
 
-        try{
+        try {
 
         } catch (err) {
             console.error(err);
@@ -108,10 +204,10 @@ class QualityRecord {
     }
 
     //find by category
-    static async findByCategory(category: number){
+    static async findByCategory(category: number) {
         const client = await pool.connect();
 
-        try{
+        try {
 
         } catch (err) {
             console.error(err);
@@ -121,10 +217,10 @@ class QualityRecord {
     }
 
     //find by classification
-    static async findByClassification(classification: number){
+    static async findByClassification(classification: number) {
         const client = await pool.connect();
 
-        try{
+        try {
 
         } catch (err) {
             console.error(err);
