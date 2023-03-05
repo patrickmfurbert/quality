@@ -10,5 +10,4 @@ exports.getQualityRecordCategoriesById = async (req: any, res: any) => {
     res.json(categories);
 }
 
-
 export {}
