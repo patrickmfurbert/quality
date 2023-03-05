@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./persistence/db');
 const qualityRecordCategoryRoutes = require('./routes/QualityRecordCategory.routes');
+const qualityRecordClassificationRoutes = require('./routes/QualityRecordClassification.routes');
 require('dotenv').config();
 
 
@@ -8,7 +9,9 @@ require('dotenv').config();
 const app = express();
 
 //configure middleware
-app.use('/api', qualityRecordCategoryRoutes);
+app.use('/api/qualityrecordcategories', qualityRecordCategoryRoutes);
+app.use('/api/qualityrecordclassifications', qualityRecordClassificationRoutes);
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

@@ -24,6 +24,22 @@ class QualityRecordCategory {
             client.release();
         }
     }
+
+    static async findById(id: number){
+        const client = await pool.connect();
+        
+        try{
+            const query = 'select * from quality_record_category where id =$1';
+            const { rows } = await client.query(query, [id]);
+            const qualityRecordCategorys = rows.map((category: QualityRecordCategory) => new QualityRecordCategory(category))
+            return qualityRecordCategorys;
+        } catch (err) {
+            console.error(err);
+        } finally {
+            client.release();
+        }
+
+    }
 }
 
 module.exports = QualityRecordCategory;
