@@ -14,7 +14,7 @@ class QualityRecordClassification {
         const client = await pool.connect();
 
         try{
-            const query = 'select * from quality_record_classification';
+            const query = 'select * from quality_record_classifications';
             const { rows } = await client.query(query);
             const qualityRecordClassifications = rows.map((classification: QualityRecordClassification) => new QualityRecordClassification(classification))
             return qualityRecordClassifications;
@@ -29,7 +29,7 @@ class QualityRecordClassification {
         const client = await pool.connect();
         
         try{
-            const query = 'select * from quality_record_classification where id =$1';
+            const query = 'select * from quality_record_classifications where id =$1';
             const { rows } = await client.query(query, [id]);
             const qualityRecordClassifications = rows.map((classification: QualityRecordClassification) => new QualityRecordClassification(classification))
             return qualityRecordClassifications;
