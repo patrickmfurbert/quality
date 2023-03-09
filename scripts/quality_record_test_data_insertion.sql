@@ -1,6 +1,15 @@
 /* switch to databse */
 \c ugmqualitydb
 
+/* Insert Data into customers*/
+
+insert into customers(type, contractor_name) values (1, 'geber')
+insert into customers(type, contractor_name) values (1, 'marrano')
+insert into customers(type, contractor_name) values (1, 'tra-mac')
+insert into customers(type, contractor_name) values (1, 'pinnacle')
+insert into customers(type, contractor_name) values (1, 'cornerstone')
+
+
 /* Insert Data into quality_records for testing */
 insert into quality_records (date, customer, issue, cost, category, classification, visit) values ('8/18/2022', 'Joe', 'Silicone all over', 275, 5, 1, 1);
 insert into quality_records (date, customer, issue, cost, category, classification, visit) values ('8/18/2022', 'Joe', 'Need a soap dispenser', 150, 11, 1, 0);
