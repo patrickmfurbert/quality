@@ -309,6 +309,28 @@ class QualityRecord {
             client.release()
         }
     }
+
+    static async createQualityRecord(qualityRecord: QualityRecord){
+        const client = await pool.connect();
+
+        try {
+            const query = `
+            INSERT INTO quality_records (date, customer, issue, cost, category, classification, visit)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING *
+            `;
+
+            const { rows } = await client.query(query, 
+                [qualityRecord.date, qualityRecord.customer, qualityRecord.issue, qualityRecord.cost, qualityRecord.category, qualityRecord.classification, qualityRecord.visit]);
+            const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
+            return qualityRecords;
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            client.release()
+        }
+    }
 }
 
 module.exports = QualityRecord;
