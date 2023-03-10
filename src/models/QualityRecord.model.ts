@@ -1,10 +1,15 @@
 const pool = require("../persistence/db");
+const contractor_builder = 'contractor_builder'
 
 class QualityRecord {
 
     id: number;
     date: string;
-    customer: string;
+    customer_id: number;
+    customer_type: string;
+    contractor_builder_name: string;
+    customer_first_name: string;
+    customer_last_name: string;
     issue: string;
     cost: number;
     category: number;
@@ -14,7 +19,11 @@ class QualityRecord {
     constructor(qualityRecord: QualityRecord) {
         this.id = qualityRecord.id;
         this.date = qualityRecord.date;
-        this.customer = qualityRecord.customer;
+        this.customer_id = qualityRecord.customer_id;
+        this.customer_type = qualityRecord.customer_type;
+        this.contractor_builder_name = qualityRecord.contractor_builder_name;
+        this.customer_first_name = qualityRecord.customer_first_name;
+        this.customer_last_name = qualityRecord.customer_last_name;
         this.issue = qualityRecord.issue;
         this.cost = qualityRecord.cost;
         this.category = qualityRecord.category;
@@ -29,11 +38,14 @@ class QualityRecord {
 
         try {
             const query = `
-            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            select qr.id, qr.date, qr.customer as customer_id, ct.type as customer_type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
             from quality_records qr
-            join quality_record_categories qro on qr.category = qro.id
-            join quality_record_classifications qrc on qr.classification = qrc.id
+            join quality_record_categories qro on (qr.category = qro.id)
+            join quality_record_classifications qrc on (qr.classification = qrc.id)
+            join customers c on (qr.customer = c.id)
+            join customer_type ct on (c.type = ct.id) 
             `;
+
 
             const { rows } = await client.query(query);
             const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
@@ -45,6 +57,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by id
     static async findById(id: number) {
         const client = await pool.connect();
@@ -68,6 +81,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by date
     static async findByDate(date: string) {
         const client = await pool.connect();
@@ -92,6 +106,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by before date inclusive
     static async findByBeforeDate(date: string) {
         const client = await pool.connect();
@@ -116,6 +131,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by after date inclusive
     static async findByAfterDate(date: string) {
         const client = await pool.connect();
@@ -140,6 +156,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by after specified date and before specified date inclusive
     static async findByBetweenDates(createdAfter: string, createdBefore: string) {
         const client = await pool.connect();
@@ -164,6 +181,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by customer
     static async findByCustomer(customer: string) {
         const client = await pool.connect();
@@ -188,6 +206,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by month & year
     static async findByMonthAndYear(date: string) {
         const client = await pool.connect();
@@ -201,6 +220,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by year
     static async findByYear(year: string) {
         const client = await pool.connect();
@@ -214,6 +234,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by category
     static async findByCategory(category: number) {
         const client = await pool.connect();
@@ -237,6 +258,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by classification
     static async findByClassification(classification: number) {
         const client = await pool.connect();
@@ -261,6 +283,7 @@ class QualityRecord {
         }
     }
 
+    //TODO - update for new tables
     //find by visits
     static async findByVisits(visits: number) {
         const client = await pool.connect();
@@ -310,6 +333,7 @@ class QualityRecord {
         }
     }
 
+    //TODO: The insert and logic needs to be updated for the new table
     static async createQualityRecord(qualityRecord: QualityRecord){
         const client = await pool.connect();
 
@@ -321,7 +345,7 @@ class QualityRecord {
             `;
 
             const { rows } = await client.query(query, 
-                [qualityRecord.date, qualityRecord.customer, qualityRecord.issue, qualityRecord.cost, qualityRecord.category, qualityRecord.classification, qualityRecord.visit]);
+                [qualityRecord.date, qualityRecord.customer_id, qualityRecord.issue, qualityRecord.cost, qualityRecord.category, qualityRecord.classification, qualityRecord.visit]);
             const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
             return qualityRecords;
 

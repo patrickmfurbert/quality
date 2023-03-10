@@ -1,5 +1,9 @@
+/* To Run script
+ * psql -U postgres -a -f ".\scripts\setup.sql"
+ */
+
 /* Drop Tables if Exist*/
-DROP DATABASE IF EXISTS ugmqualitydb;
+DROP DATABASE IF EXISTS ugmqualitydb WITH (force);
 
 /*  Create Database */
 CREATE DATABASE ugmqualitydb WITH OWNER ugm;
@@ -21,7 +25,7 @@ CREATE TABLE quality_record_classifications (
 CREATE TABLE customer_type (
 	id serial PRIMARY KEY,
 	type VARCHAR ( 255 ) NOT NULL
-)
+);
 
 CREATE TABLE customers (
 	id serial PRIMARY KEY,
@@ -43,14 +47,13 @@ CREATE TABLE quality_records (
 );
 
 
-
 /* Insert Default Data For Classification */
 INSERT INTO quality_record_classifications (classification) VALUES ('major');
 INSERT INTO quality_record_classifications (classification) VALUES ('minor'); 
 
 /* Insert Default Data for Customer Type*/
-INSERT INTO customer_type (type) VALUES ('contractor_builder')
-INSERT INTO customer_type (type) VALUES ('retail')
+INSERT INTO customer_type (type) VALUES ('contractor_builder');
+INSERT INTO customer_type (type) VALUES ('retail');
 
 /* Insert Default Data For Category */
 INSERT INTO quality_record_categories (category) VALUES ('chip not filled in');
