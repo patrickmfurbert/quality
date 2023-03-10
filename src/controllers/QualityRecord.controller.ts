@@ -30,4 +30,11 @@ exports.getQualityRecordByDate = async (req: any, res: any) => {
     res.json(qualityRecords);
 }
 
+exports.createQualityRecord = async (req: any, res: any) => {
+    const qualityRecord = await QualityRecord.createQualityRecord(req.body);
+
+    res.json(qualityRecord);
+
+}
+
 export { }

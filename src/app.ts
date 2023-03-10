@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('./persistence/db');
+const bodyParser = require('body-parser');
 const qualityRecordCategoryRoutes = require('./routes/QualityRecordCategory.routes');
 const qualityRecordClassificationRoutes = require('./routes/QualityRecordClassification.routes');
 const qualityRecordRoutes = require('./routes/QualityRecord.routes');
@@ -10,6 +10,10 @@ require('dotenv').config();
 const app = express();
 
 //configure middleware
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
+//routes
 app.use('/api/qualityrecordcategories', qualityRecordCategoryRoutes);
 app.use('/api/qualityrecordclassifications', qualityRecordClassificationRoutes);
 app.use('/api/qualityrecords', qualityRecordRoutes);
