@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const qualityRecordCategoryRoutes = require('./routes/QualityRecordCategory.routes');
 const qualityRecordClassificationRoutes = require('./routes/QualityRecordClassification.routes');
 const qualityRecordRoutes = require('./routes/QualityRecord.routes');
+const customerTypeRoutes = require('./routes/CustomerType.routes');
 require('dotenv').config();
 
 
@@ -17,6 +18,8 @@ app.use(bodyParser.json());
 app.use('/api/qualityrecordcategories', qualityRecordCategoryRoutes);
 app.use('/api/qualityrecordclassifications', qualityRecordClassificationRoutes);
 app.use('/api/qualityrecords', qualityRecordRoutes);
+app.use('/api/customertypes', customerTypeRoutes);
+
 
 
 const port = process.env.PORT || 3000;
