@@ -54,7 +54,8 @@ class Customer {
         }
     }
 
-    //find by contractorBuilder (case insensitive)
+    //find by name (case insensitive) 
+    //dynamically constructs query based on get request parameters
     static async findByName(names: any) {
         const client = await pool.connect()
 
