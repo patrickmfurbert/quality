@@ -382,4 +382,4 @@ class QualityRecord {
 
 module.exports = QualityRecord;
 
-export { }
+export {}
