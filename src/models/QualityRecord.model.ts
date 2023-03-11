@@ -46,7 +46,6 @@ class QualityRecord {
             join customer_type ct on (c.type = ct.id) 
             `;
 
-
             const { rows } = await client.query(query);
             const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
             return qualityRecords;
@@ -57,17 +56,18 @@ class QualityRecord {
         }
     }
 
-    //TODO - update for new tables
     //find by id
     static async findById(id: number) {
         const client = await pool.connect();
 
         try {
             const query = `
-            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            select qr.id, qr.date, qr.customer as customer_id, ct.type as customer_type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
             from quality_records qr
-            join quality_record_categories qro on qr.category = qro.id
-            join quality_record_classifications qrc on qr.classification = qrc.id
+            join quality_record_categories qro on (qr.category = qro.id)
+            join quality_record_classifications qrc on (qr.classification = qrc.id)
+            join customers c on (qr.customer = c.id)
+            join customer_type ct on (c.type = ct.id) 
             where qr.id =$1
             `;
 
@@ -81,17 +81,18 @@ class QualityRecord {
         }
     }
 
-    //TODO - update for new tables
     //find by date
     static async findByDate(date: string) {
         const client = await pool.connect();
 
         try {
             const query = `
-            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            select qr.id, qr.date, qr.customer as customer_id, ct.type as customer_type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
             from quality_records qr
-            join quality_record_categories qro on qr.category = qro.id
-            join quality_record_classifications qrc on qr.classification = qrc.id
+            join quality_record_categories qro on (qr.category = qro.id)
+            join quality_record_classifications qrc on (qr.classification = qrc.id)
+            join customers c on (qr.customer = c.id)
+            join customer_type ct on (c.type = ct.id) 
             where qr.date = $1
             `;
 
@@ -106,17 +107,18 @@ class QualityRecord {
         }
     }
 
-    //TODO - update for new tables
     //find by before date inclusive
     static async findByBeforeDate(date: string) {
         const client = await pool.connect();
 
         try {
             const query = `
-            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            select qr.id, qr.date, qr.customer as customer_id, ct.type as customer_type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
             from quality_records qr
-            join quality_record_categories qro on qr.category = qro.id
-            join quality_record_classifications qrc on qr.classification = qrc.id
+            join quality_record_categories qro on (qr.category = qro.id)
+            join quality_record_classifications qrc on (qr.classification = qrc.id)
+            join customers c on (qr.customer = c.id)
+            join customer_type ct on (c.type = ct.id) 
             where qr.date <= $1
             `;
 
@@ -131,17 +133,18 @@ class QualityRecord {
         }
     }
 
-    //TODO - update for new tables
     //find by after date inclusive
     static async findByAfterDate(date: string) {
         const client = await pool.connect();
 
         try {
             const query = `
-            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            select qr.id, qr.date, qr.customer as customer_id, ct.type as customer_type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
             from quality_records qr
-            join quality_record_categories qro on qr.category = qro.id
-            join quality_record_classifications qrc on qr.classification = qrc.id
+            join quality_record_categories qro on (qr.category = qro.id)
+            join quality_record_classifications qrc on (qr.classification = qrc.id)
+            join customers c on (qr.customer = c.id)
+            join customer_type ct on (c.type = ct.id) 
             where qr.date >= $1
             `;
 
@@ -156,17 +159,18 @@ class QualityRecord {
         }
     }
 
-    //TODO - update for new tables
     //find by after specified date and before specified date inclusive
     static async findByBetweenDates(createdAfter: string, createdBefore: string) {
         const client = await pool.connect();
 
         try {
             const query = `
-            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            select qr.id, qr.date, qr.customer as customer_id, ct.type as customer_type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
             from quality_records qr
-            join quality_record_categories qro on qr.category = qro.id
-            join quality_record_classifications qrc on qr.classification = qrc.id
+            join quality_record_categories qro on (qr.category = qro.id)
+            join quality_record_classifications qrc on (qr.classification = qrc.id)
+            join customers c on (qr.customer = c.id)
+            join customer_type ct on (c.type = ct.id) 
             where qr.date between $1 and $2
             `;
 
@@ -234,17 +238,18 @@ class QualityRecord {
         }
     }
 
-    //TODO - update for new tables
     //find by category
     static async findByCategory(category: number) {
         const client = await pool.connect();
             
         try {
             const query = `
-            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            select qr.id, qr.date, qr.customer as customer_id, ct.type as customer_type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
             from quality_records qr
-            join quality_record_categories qro on qr.category = qro.id
-            join quality_record_classifications qrc on qr.classification = qrc.id
+            join quality_record_categories qro on (qr.category = qro.id)
+            join quality_record_classifications qrc on (qr.classification = qrc.id)
+            join customers c on (qr.customer = c.id)
+            join customer_type ct on (c.type = ct.id) 
             where qr.category =$1
             `;
 
@@ -258,17 +263,18 @@ class QualityRecord {
         }
     }
 
-    //TODO - update for new tables
     //find by classification
     static async findByClassification(classification: number) {
         const client = await pool.connect();
 
         try {
             const query = `
-            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            select qr.id, qr.date, qr.customer as customer_id, ct.type as customer_type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
             from quality_records qr
-            join quality_record_categories qro on qr.category = qro.id
-            join quality_record_classifications qrc on qr.classification = qrc.id
+            join quality_record_categories qro on (qr.category = qro.id)
+            join quality_record_classifications qrc on (qr.classification = qrc.id)
+            join customers c on (qr.customer = c.id)
+            join customer_type ct on (c.type = ct.id) 
             where qr.classification =$1
             `;
 
@@ -290,10 +296,12 @@ class QualityRecord {
 
         try {
             const query = `
-            select qr.id, qr.date, qr.customer, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
+            select qr.id, qr.date, qr.customer as customer_id, ct.type as customer_type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name, qr.issue, qr.cost, qro.category, qrc.classification, qr.visit
             from quality_records qr
-            join quality_record_categories qro on qr.category = qro.id
-            join quality_record_classifications qrc on qr.classification = qrc.id
+            join quality_record_categories qro on (qr.category = qro.id)
+            join quality_record_classifications qrc on (qr.classification = qrc.id)
+            join customers c on (qr.customer = c.id)
+            join customer_type ct on (c.type = ct.id) 
             where qr.visit = $1
             `;
 
@@ -338,15 +346,30 @@ class QualityRecord {
         const client = await pool.connect();
 
         try {
-            const query = `
-            INSERT INTO quality_records (date, customer, issue, cost, category, classification, visit)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING *
+
+            const check_customers = `
+            SELECT c.id from customers c
+            WHERE c.id = $1
             `;
 
-            const { rows } = await client.query(query, 
-                [qualityRecord.date, qualityRecord.customer_id, qualityRecord.issue, qualityRecord.cost, qualityRecord.category, qualityRecord.classification, qualityRecord.visit]);
-            const qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
+            let { rows } = await client.query(check_customers, [qualityRecord.customer_id])
+            let qualityRecords;
+
+            if(rows.length > 0){
+                const query = `
+                INSERT INTO quality_records (date, customer, issue, cost, category, classification, visit)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING *
+                `;            
+
+              let { rows } = await client.query(query, 
+                    [qualityRecord.date, qualityRecord.customer_id, qualityRecord.issue, qualityRecord.cost, qualityRecord.category, qualityRecord.classification, qualityRecord.visit]);
+                qualityRecords = rows.map((qualityRecord: QualityRecord) => new QualityRecord(qualityRecord))
+            }else{
+                qualityRecords = {
+                    "Error":"CustomerNotFound"
+                }
+            }
             return qualityRecords;
 
         } catch (err) {
