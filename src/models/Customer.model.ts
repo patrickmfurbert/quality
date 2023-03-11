@@ -59,7 +59,6 @@ class Customer {
     static async findByName(names: any) {
         const client = await pool.connect()
 
-       
         let query = `
         select c.id, c.type, c.contractor_builder_name, c.first_name as customer_first_name, c.last_name as customer_last_name from customers c where
         `;
